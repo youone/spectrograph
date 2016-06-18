@@ -9,16 +9,30 @@
 <html>
   <head>
     <title></title>
+
+    <link rel="stylesheet" href="css/d3Test.css">
+
     <script type="text/javascript" src="js/3rd/jquery/jquery-3.0.0.min.js"></script>
-    <script type="text/javascript" src="js/3rd/d3/d3.v4.0.0-alpha.49.min.js"></script>
-    <script type="text/javascript" src="js/3rd/require/require.min.js"></script>
-    <script type="text/javascript" src="js/test.js"></script>
+    <script type="text/javascript" src="js/3rd/d3/d3.min.js"></script>
+    <%--<script type="text/javascript" src="js/3rd/require/require.min.js"></script>--%>
+    <script type="text/javascript" src="js/imageTest.js"></script>
+
+    <style type="text/css">
+      .overlay {
+        fill: none;
+        pointer-events: all;
+      }
+    </style>
+
+
   </head>
   <body>
 
   <div id="container">
-    <canvas id="myCanvas" width="300" height="100"></canvas>
+    <canvas id="myCanvas" width="1024" height="500"></canvas>
   </div>
+
+  <%--<script type="text/javascript" src="js/d3Test.js"></script>--%>
 
 
   </body>

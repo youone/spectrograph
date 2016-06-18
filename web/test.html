@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <title>basemap -- pan & zoom</title>
+    <script src="js/3rd/jquery/jquery-1.11.3.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <style type="text/css">
+        .overlay {
+            fill: none;
+            pointer-events: all;
+        }
+    </style>
+</head>
+
+<body>
+<script>
+
+    var imgHeight = 1025, imgWidth = 1538,      // Image dimensions (don't change these)
+            width =  960, height = 650,             // Dimensions of cropped region
+            translate0 = [-290, -180], scale0 = 1;  // Initial offset & scale
+
+//    var ctx = cnvs.getContext("2d");
+//    var imgData = ctx.createImageData(1538, 1025);
+
+    svg = d3.select("body").append("svg")
+            .attr("width",  width + "px")
+            .attr("height", height + "px");
+
+    svg.append("rect")
+            .attr("class", "overlay")
+            .attr("width", width + "px")
+            .attr("height", height + "px");
+
+    svg = svg.append("g")
+            .attr("transform", "translate(" + translate0 + ")scale(" + scale0 + ")")
+            .call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
+            .append("g");
+
+    svg.append("image")
+            .attr("width",  imgWidth + "px")
+            .attr("height", imgHeight + "px")
+            .attr("xlink:href", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==");
+//            .attr("xlink:href", "Base.png");
+
+//    var cnvs = $('<canvas id="myCanvas" width="200" height="100" style="border:1px solid #c3c3c3;">')[0];
+//    console.log(cnvs.getContext("2d"));
+//    var ctx = cnvs.getContext("2d");
+////    ctx.fillStyle = "#FF0000";
+////    ctx.fillRect(0,0,150,75);
+////    var imgData = ctx.createImageData(1024, 500);
+////    ctx.putImageData(imgData, 0, 0);
+//
+//    var cnvs2 = svg.append("canvas")
+//            .attr("width",  imgWidth + "px")
+//            .attr("height", imgHeight + "px");
+//
+//    console.log(cnvs2);
+//    var ctx = cnvs2.node().getContext("2d");
+////    ctx.fillStyle = "#FF0000";
+////    ctx.fillRect(0,0,150,75);
+
+
+    function zoom() {
+        svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+        console.log("translate: " + d3.event.translate + ", scale: " + d3.event.scale);
+    }
+
+</script>
+</body>
