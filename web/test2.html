@@ -1,38 +1,199 @@
 <!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-    <script src="js/3rd/jquery/jquery-1.11.3.min.js"></script>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
+<meta charset="utf-8">
+<head>
+    <title>basemap -- pan & zoom</title>
+    <script src="js/3rd/jquery/jquery-3.0.0.min.js"></script>
+    <script src="js/3rd/d3/d3.min.js"></script>
+    <style type="text/css">
+        .overlay {
+            fill: none;
+            pointer-events: all;
+        }
 
+        .axis path, .axis line
+        {
+            fill: none;
+            stroke: #777;
+            shape-rendering: crispEdges;
+        }
+
+        .axis text
+        {
+            font-family: 'Arial';
+            font-size: 10px;
+        }
+        .tick
+        {
+            stroke-dasharray: 1, 2;
+        }
+
+        .zoomOverlay {
+            pointer-events: all;
+            fill:none;
+        }
+
+
+    </style>
 </head>
+
 <body>
 
-<div id="vis"></div>
+<!--<div id="content" style="width:500px; height:250px"></div>-->
+<svg id="svgContent" width="400" height="200" style="border:solid 1px;">
+    <!--<rect class="specLine" x="100" y="150" width="20" height="20" style="fill:blue"></rect>-->
+</svg>
+<input id="newLineButton" type="button" value="new line">
 
 <script>
-    var base = d3.select("#vis");
-    var chart = base.append("canvas")
+
+    "use strict"
+
+    function zoomed(){
+        d3.select("#svgContent").select(".x.axis").call(xAxis);
+        d3.select("#svgContent").select(".y.axis").call(yAxis);
+//        d3.select("#specContent").selectAll(".specPixel").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+//        d3.select("#specContent").selectAll(".specLine").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+        xScaleFactor = Math.abs(xScale(1)-xScale(0));
+        yScaleFactor = Math.abs(yScale(1)-yScale(0));
+        d3.select("#specContent").selectAll(".specLine").each(function(){
+//            var oldY = Number.parseInt($(this).attr("y"));
+            var moveY = d3.event.translate[1];
+            var moveX = d3.event.translate[0];
+            var posY = Number.parseInt($(this).attr("id"));
+
+            $(this).attr("x", xScale(0) + moveX/xScaleFactor);
+            $(this).attr("y", 20+(posY+nLines)*yScaleFactor + moveY);
+        })
+
+//        console.log('...');
+//        console.log(d3.event.scale);
+//        console.log(Math.abs(xScale(1)-xScale(0)));
+//        console.log(Math.abs(yScale(1)-yScale(0)));
+    }
+
+
+    var xScale = d3.scale.linear().range([20,380]).domain([0,10]);
+    var yScale = d3.scale.linear().range([20,180]).domain([10,0]);
+    var xScaleFactor = Math.abs(xScale(1)-xScale(0));
+
+    var xAxis = d3.svg.axis().scale(xScale).tickSize(5).tickSubdivide(true);
+    var yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(5).tickSubdivide(true);
+    var yScaleFactor = Math.abs(yScale(1)-yScale(0));
+
+    d3.select("#svgContent").append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0,180)")
+            .call(xAxis);
+
+    d3.select("#svgContent").append("g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(20,0)")
+            .call(yAxis);
+
+    var specContent = d3.select("#svgContent").append("g")
             .attr("width", 400)
-            .attr("height", 300);
+            .attr("height", 200)
+            .attr("id", "specContent")
 
-    var context = chart.node().getContext("2d");
-    var data = [1,2,13,20,23];
+    var zm = d3.behavior.zoom().x(xScale).y(yScale).scaleExtent([0, 10]).on("zoom", zoomed);
 
-    var scale = d3.scale.linear()
-            .range([10, 390])
-            .domain([1,23]);
+    var zoomOverlay = d3.select("#svgContent").append("rect")
+            .attr("width", 400)
+            .attr("height", 200)
+            .attr("class", "zoomOverlay")
+            .call(zm)
 
-    data.forEach(function(d, i) {
-        context.beginPath();
-        context.rect(scale(d), 150, 10, 10);
-        context.fillStyle="red";
-        context.fill();
-        context.closePath();
+
+    var specData = [];
+    var specLines = [];
+    var nLines = -1;
+
+
+    $('#newLineButton').click(function() {
+
+//        var newLine = d3.select("#specContent").append('rect')
+//                .attr("class","specLine")
+//                .attr('x', xScale(0))
+//                .attr('y', yScale(10))
+//                .attr('width', 360)
+//                .attr('height', 10)
+//                .attr('style', "fill:hsl(" + Math.floor((Math.random() * 360) + 1)+ ",100%,50%)")
+//                .node();
+
+        nLines++;
+        var newLine = d3.select("#specContent").append('svg')
+                .attr("class","specLine")
+                .attr('x', xScale(0))
+                .attr('y', yScale(10))
+                .attr('id', -specLines.length)
+//                .attr('id', yScale(10))
+                .attr('width', 360)
+                .attr('height', 1*yScaleFactor)
+//                .attr('style', "border:solid 1px; color:red;")
+//                .style("border", "solid")
+                .call(testcallback2);
+
+//        var newLine = d3.select("#specContent").append('g')
+//                .attr("class","specLine")
+//                .call(testcallback);
+//
+//        for (var iLine in specLines) {
+//            var line = specLines[iLine];
+//            var currenty = d3.transform(specLines[iLine].attr("transform")).translate[1];
+//            specLines[iLine].attr("transform", "translate(0," + (currenty + 1*yScaleFactor) + ")");
+//        }
+
+        //shift the line position
+        for (var iLine in specLines) {
+            var line = specLines[iLine];
+            var currenty = Number.parseInt(specLines[iLine].attr("y"));
+//            console.log(currenty);
+            line.attr("y", currenty + 1*yScaleFactor);
+//            line.attr("id", currenty + 1*yScaleFactor);
+//            specLines[iLine].attr("transform", "translate(0," + (currenty + 1*yScaleFactor) + ")");
+        }
+
+        specLines.push(newLine)
+
+
     });
 
-</script>
+    function testcallback2(selection) {
+//        console.log('adding pixels');
+//        var pixelData = [0,5];
+//        var pixelData = [0,1,2,3,4,5,6,7,8,9];
+        var pixelData = Array.apply(null, Array(1000)).map(function (_, i) {return i/100;});
+        selection.selectAll("rect").data(pixelData).enter().append('rect')
+                .attr("class","specPixel")
+                .attr('x', function(d){
+//                    console.log(xScale(d))
+                    return xScale(d)-xScale(0);
+                })
+                .attr("y",0)
+                .attr('width', (10/pixelData.length)*xScaleFactor)
+                .attr("height",1*yScaleFactor)
+                .attr('style', function() {return "fill:hsl(" + Math.floor((Math.random() * 360) + 1)+ ",100%,50%)";});
 
+    }
+
+    function testcallback(selection) {
+//        var pixelData = [0,1,2,3,4,5,6,7,8,9];
+        var pixelData = [0,5];
+//        console.log(zm.scale());
+//        console.log(xScaleFactor);
+//        console.log(zm.translate());
+//        selection.data(pixelData).enter().append('rect')
+        selection.selectAll("rect").data(pixelData).enter().append('rect')
+                .attr("class","specPixel")
+                .attr('x', function(d){
+//                    console.log(xScale(d))
+                    return xScale(d);
+                })
+                .attr('y', yScale(10))
+                .attr('width', (10/pixelData.length)*xScaleFactor)
+                .attr('height', 1*yScaleFactor)
+                .attr('style', function() {return "fill:hsl(" + Math.floor((Math.random() * 360) + 1)+ ",100%,50%)";});
+    }
+
+</script>
 </body>
-</html>

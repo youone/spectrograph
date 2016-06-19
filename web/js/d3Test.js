@@ -1,6 +1,7 @@
 //$(document).ready(function () {
 
     function zoomed() {
+        console.log('hej');
         vis.select(".x.axis").call(xAxis);
         vis.select(".y.axis").call(yAxis);
         vis.selectAll(".line").attr("d", lineFunc(lineData));
@@ -37,6 +38,8 @@
         .domain([ d3.min(lineData, function(d) {return d.y;}),
             d3.max(lineData, function(d) {return d.y;}) ]);
     var yScaleFactor = Math.abs(yScale(1)-yScale(0));
+
+
 
     var xAxis = d3.svg.axis()
         .scale(xScale)

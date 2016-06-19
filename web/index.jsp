@@ -15,7 +15,7 @@
     <script type="text/javascript" src="js/3rd/jquery/jquery-3.0.0.min.js"></script>
     <script type="text/javascript" src="js/3rd/d3/d3.min.js"></script>
     <%--<script type="text/javascript" src="js/3rd/require/require.min.js"></script>--%>
-    <script type="text/javascript" src="js/imageTest.js"></script>
+    <%--<script type="text/javascript" src="js/imageTest.js"></script>--%>
 
     <style type="text/css">
       .overlay {
@@ -28,11 +28,11 @@
   </head>
   <body>
 
-  <div id="container">
-    <canvas id="myCanvas" width="1024" height="500"></canvas>
-  </div>
+  <%--<div id="container">--%>
+    <%--<canvas id="myCanvas" width="1024" height="500"></canvas>--%>
+  <%--</div>--%>
 
-  <%--<script type="text/javascript" src="js/d3Test.js"></script>--%>
+  <script type="text/javascript" src="js/d3Test.js"></script>
 
 
   </body>
