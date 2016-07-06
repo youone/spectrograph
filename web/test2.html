@@ -93,7 +93,7 @@
     var specContent = d3.select("#svgContent").append("g")
             .attr("width", 400)
             .attr("height", 200)
-            .attr("id", "specContent")
+            .attr("id", "specContent");
 
     var zm = d3.behavior.zoom().x(xScale).y(yScale).scaleExtent([0, 10]).on("zoom", zoomed);
 
@@ -101,7 +101,7 @@
             .attr("width", 400)
             .attr("height", 200)
             .attr("class", "zoomOverlay")
-            .call(zm)
+            .call(zm);
 
 
     var specData = [];

@@ -27,5 +27,6 @@
     <orderEntry type="library" name="openlayers 3" level="application" />
     <orderEntry type="library" name="RequireJs" level="application" />
     <orderEntry type="library" name="jquery-3.0.0" level="application" />
+    <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
   </component>
 </module>

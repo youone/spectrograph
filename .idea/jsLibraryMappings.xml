@@ -1,6 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{RequireJs, d3, jquery, jquery-3.0.0, openlayers 3}" />
-  </component>
-</project>
+<project version="4" />
