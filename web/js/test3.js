@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     "use strict";
 
     //var theCanvas = $("<canvas width=500px height=1px>").basicElement().appendTo("body");
@@ -14,9 +15,10 @@ $(document).ready(function () {
     }
 
     var container2 = $("<div>").
+        attr("id","axifyMe").
         css("width","300px").
         css("height","200px").
-        axes().appendTo("body");
+        axlar().appendTo("body");
 
 
     console.log("hej")
